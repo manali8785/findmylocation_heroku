@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="base.css"/>
+    <title>Demo</title>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        var $injector = angular.injector(['ng']);
+
+        angular.module('myApp', []).controller('MyController', function ($scope,$http) {
+            $scope.message = 'Hello';
+
+        }).directive('address', function ($http) {
+            return {
+                templateUrl: 'address.html',
+                scope: {
+                },
+                link: function (scope,http) {
+                    scope.state = 'California';
+                    scope.address={};
+                    geo().then(function (data) {
+                        console.log('Lat: ',data.coords.latitude +' Long: '+data.coords.longitude);
+                        $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+data.coords.latitude+','+data.coords.longitude+'&key=AIzaSyChO1i3ZMcW3sdOzbTgsVPsCal1HGx__vo').then(function(obj){
+                            var add_components=obj.data.results[0].address_components;
+                            for(var i=0; i<add_components.length; i++){
+                                scope.address[add_components[i].types[0]]=add_components[i].long_name;
+                            }
+                            console.log(scope.address);
+                        });
+                    });
+
+
+                }
+            };
+        });
+
+
+        var geo = function () {
+            return $injector.invoke(function ($q) {
+                return $q(function (resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(function (coords) {
+                        resolve(coords);
+                    }, function () {
+                        reject(arguments);
+                    }, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 5000
+                    });
+                });
+            });
+        };
+
+    </script>
+</head>
+<body ng-controller="MyController">
+
+<div address></div>
+
+</body>
+</html>

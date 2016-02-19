@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Geolocation</title>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+
+        var $injector = angular.injector(['ng']);
+        var geo = function () {
+            return $injector.invoke(function ($q) {
+                return $q(function (resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(function (coords) {
+                        resolve(coords);
+                    }, function () {
+                        reject(arguments);
+                    }, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 5000
+                    });
+                });
+            });
+        };
+        geo().then(function (data) {
+            console.log(data);
+        });
+
+    </script>
+</head>
+<body>
+
+
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<section>
+    <style>
+        .geocode-address-container {
+            background-color: #eee;
+            padding: 1em;
+        }
+    </style>
+    <div class="geocode-address-container">
+        <h1>Your Address</h1>
+        <small>based on your geolocation ... </small>
+        <div>
+            <div class="address-line-1">{{address.street_number}}</div>
+            <div class="street">{{address.route}}</div>
+            <div class="locality">{{address.locality}}</div>
+            <div class="county">{{address.administrative_area_level_2}}</div>
+            <div class="state">{{address.administrative_area_level_1}}</div>
+            <div class="country">{{address.country}}</div>
+            <div class="zip">{{address.postal_code}}</div>
+        </div>
+    </div>
+</section>
